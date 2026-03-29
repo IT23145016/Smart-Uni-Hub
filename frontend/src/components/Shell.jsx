@@ -22,12 +22,33 @@ export default function Shell({ title, children }) {
 
   return (
     <div className="shell">
+      <div className="page-menubar">
+        <div className="page-menubar-links">
+          <button type="button" className="menu-icon-link" onClick={() => setMenuOpen((current) => !current)} aria-label="Open menu">
+            <MenuIcon />
+          </button>
+          <Link to="/">Home</Link>
+          <a href="#footer-contact">Contact Us</a>
+          <a href="#footer-help">Help</a>
+        </div>
+
+        <div className="page-menubar-actions">
+          <a className="page-menubar-link" href="#footer-about">
+            About Us
+          </a>
+          {!user ? (
+            <Link className="menu-icon-link" to="/signin" aria-label="Sign in">
+              <SignInIcon />
+            </Link>
+          ) : null}
+          <button type="button" className="menu-icon-link" aria-label="My account" onClick={() => setMenuOpen(true)}>
+            <AccountIcon />
+          </button>
+        </div>
+      </div>
+
       <header className="shell-topbar">
-        <button type="button" className="menu-toggle" onClick={() => setMenuOpen((current) => !current)} aria-label="Open menu">
-          <span />
-          <span />
-          <span />
-        </button>
+        <div className="shell-topbar-spacer" aria-hidden="true" />
         <div className="shell-title">
           <h1>{title}</h1>
         </div>
@@ -61,9 +82,16 @@ export default function Shell({ title, children }) {
           <Link to="/resources" onClick={closeMenu}>
             Facilities Catalogue
           </Link>
-          <Link to="/admin/roles" onClick={closeMenu}>
-            Role Management
-          </Link>
+          {user?.roles?.includes("ADMIN") ? (
+            <>
+              <Link to="/admin/resources" onClick={closeMenu}>
+                Resource Administration
+              </Link>
+              <Link to="/admin/roles" onClick={closeMenu}>
+                Role Management
+              </Link>
+            </>
+          ) : null}
         </nav>
 
         {user ? (
@@ -97,5 +125,57 @@ export default function Shell({ title, children }) {
         </div>
       </aside>
     </div>
+  );
+}
+
+function SignInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M10 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20H10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 8l4 4-4 4M9 12h9"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function AccountIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="8" r="3.4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M5 19c1.6-3 4.1-4.5 7-4.5s5.4 1.5 7 4.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M5 7h14M5 12h14M5 17h14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

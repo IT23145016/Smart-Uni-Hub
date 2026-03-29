@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Shell from "../components/Shell";
-import { useAuth } from "../contexts/AuthContext";
 import { api } from "../services/api";
 
 const TYPE_OPTIONS = ["LECTURE_HALL", "LAB", "MEETING_ROOM", "EQUIPMENT"];
@@ -20,7 +19,6 @@ const emptyForm = {
 };
 
 export default function ResourcesPage() {
-  const { user } = useAuth();
   const [resources, setResources] = useState([]);
   const [filters, setFilters] = useState({
     query: "",
@@ -29,13 +27,8 @@ export default function ResourcesPage() {
     minCapacity: "",
     status: ""
   });
-  const [form, setForm] = useState(emptyForm);
-  const [editingId, setEditingId] = useState("");
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-
-  const isAdmin = user?.roles?.includes("ADMIN");
   const activeCount = resources.filter((resource) => resource.status === "ACTIVE").length;
 
   useEffect(() => {
@@ -60,103 +53,9 @@ export default function ResourcesPage() {
     setFilters((current) => ({ ...current, [name]: value }));
   }
 
-  function handleFormChange(event) {
-    const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
-  }
-
-  function handleWindowChange(index, field, value) {
-    setForm((current) => ({
-      ...current,
-      availabilityWindows: current.availabilityWindows.map((window, windowIndex) =>
-        windowIndex === index ? { ...window, [field]: value } : window
-      )
-    }));
-  }
-
-  function addWindow() {
-    setForm((current) => ({
-      ...current,
-      availabilityWindows: [...current.availabilityWindows, { dayOfWeek: "MONDAY", startTime: "08:00", endTime: "17:00" }]
-    }));
-  }
-
-  function removeWindow(index) {
-    setForm((current) => ({
-      ...current,
-      availabilityWindows:
-        current.availabilityWindows.length === 1
-          ? current.availabilityWindows
-          : current.availabilityWindows.filter((_, windowIndex) => windowIndex !== index)
-    }));
-  }
-
-  function startEdit(resource) {
-    setEditingId(resource.id);
-    setForm({
-      resourceCode: resource.resourceCode,
-      name: resource.name,
-      type: resource.type,
-      capacity: resource.capacity,
-      location: resource.location,
-      status: resource.status,
-      description: resource.description || "",
-      amenities: resource.amenities.join(", "),
-      availabilityWindows: resource.availabilityWindows
-    });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function resetForm() {
-    setEditingId("");
-    setForm(emptyForm);
-  }
-
   async function submitFilters(event) {
     event.preventDefault();
     loadResources(filters);
-  }
-
-  async function submitForm(event) {
-    event.preventDefault();
-    setSaving(true);
-    setError("");
-
-    const payload = {
-      ...form,
-      capacity: Number(form.capacity),
-      amenities: form.amenities
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-    };
-
-    try {
-      if (editingId) {
-        await api.updateResource(editingId, payload);
-      } else {
-        await api.createResource(payload);
-      }
-      resetForm();
-      await loadResources();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function removeResource(resourceId) {
-    try {
-      setError("");
-      await api.deleteResource(resourceId);
-      if (editingId === resourceId) {
-        resetForm();
-      }
-      await loadResources();
-    } catch (err) {
-      setError(err.message);
-    }
   }
 
   return (
@@ -252,115 +151,6 @@ export default function ResourcesPage() {
 
       {error ? <p className="error">{error}</p> : null}
 
-      {isAdmin ? (
-        <section className="table-card">
-          <div className="table-header">
-            <div>
-              <p className="eyebrow">Resource Administration</p>
-              <h3>{editingId ? "Update resource details" : "Add a new resource to the catalogue"}</h3>
-            </div>
-            {editingId ? (
-              <button type="button" className="secondary-button" onClick={resetForm}>
-                Cancel edit
-              </button>
-            ) : null}
-          </div>
-
-          <form className="resource-form" onSubmit={submitForm}>
-            <label>
-              Resource code
-              <input name="resourceCode" value={form.resourceCode} onChange={handleFormChange} required />
-            </label>
-            <label>
-              Name
-              <input name="name" value={form.name} onChange={handleFormChange} required />
-            </label>
-            <label>
-              Type
-              <select name="type" value={form.type} onChange={handleFormChange}>
-                {TYPE_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {formatLabel(option)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Capacity
-              <input name="capacity" type="number" min="1" value={form.capacity} onChange={handleFormChange} required />
-            </label>
-            <label>
-              Location
-              <input name="location" value={form.location} onChange={handleFormChange} required />
-            </label>
-            <label>
-              Status
-              <select name="status" value={form.status} onChange={handleFormChange}>
-                {STATUS_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {formatLabel(option)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="full-span">
-              Description
-              <textarea name="description" value={form.description} onChange={handleFormChange} rows="3" />
-            </label>
-            <label className="full-span">
-              Amenities
-              <input
-                name="amenities"
-                value={form.amenities}
-                onChange={handleFormChange}
-                placeholder="Projector, Whiteboard, Air Conditioning"
-              />
-            </label>
-
-            <div className="full-span">
-              <div className="table-header">
-                <h4>Availability windows</h4>
-                <button type="button" className="secondary-button" onClick={addWindow}>
-                  Add window
-                </button>
-              </div>
-              <div className="window-list">
-                {form.availabilityWindows.map((window, index) => (
-                  <div className="window-row" key={`${window.dayOfWeek}-${index}`}>
-                    <select value={window.dayOfWeek} onChange={(event) => handleWindowChange(index, "dayOfWeek", event.target.value)}>
-                      {DAY_OPTIONS.map((option) => (
-                        <option key={option} value={option}>
-                          {formatLabel(option)}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="time"
-                      value={window.startTime}
-                      onChange={(event) => handleWindowChange(index, "startTime", event.target.value)}
-                    />
-                    <input
-                      type="time"
-                      value={window.endTime}
-                      onChange={(event) => handleWindowChange(index, "endTime", event.target.value)}
-                    />
-                    <button type="button" className="secondary-button" onClick={() => removeWindow(index)}>
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="full-span form-actions">
-              <button type="submit" disabled={saving}>
-                {saving ? "Saving..." : editingId ? "Update resource" : "Create resource"}
-              </button>
-            </div>
-          </form>
-        </section>
-      ) : null}
-
       <section className="resource-grid">
         {loading ? <div className="panel">Loading catalogue...</div> : null}
         {!loading && resources.length === 0 ? <div className="panel">No resources matched your filters.</div> : null}
@@ -393,16 +183,6 @@ export default function ResourcesPage() {
                     </div>
                   ))}
                 </div>
-                {isAdmin ? (
-                  <div className="card-actions">
-                    <button type="button" className="secondary-button" onClick={() => startEdit(resource)}>
-                      Edit
-                    </button>
-                    <button type="button" onClick={() => removeResource(resource.id)}>
-                      Delete
-                    </button>
-                  </div>
-                ) : null}
               </article>
             ))
           : null}
