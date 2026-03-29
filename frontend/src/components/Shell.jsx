@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import SiteFooter from "./SiteFooter";
 
 export default function Shell({ title, children }) {
   const { user, loading } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
   const initials = user?.fullName
     ? user.fullName
@@ -13,26 +16,66 @@ export default function Shell({ title, children }) {
         .join("")
     : "SC";
 
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
   return (
     <div className="shell">
-      <aside className="sidebar">
-        <p className="eyebrow">Smart Campus Operations Hub</p>
-        <h1>{title}</h1>
-        <p className="muted">A focused operations layer for alerts, access, and accountability.</p>
+      <header className="shell-topbar">
+        <button type="button" className="menu-toggle" onClick={() => setMenuOpen((current) => !current)} aria-label="Open menu">
+          <span />
+          <span />
+          <span />
+        </button>
+        <div className="shell-title">
+          <h1>{title}</h1>
+        </div>
+        <div className="shell-topbar-spacer" aria-hidden="true" />
+      </header>
+
+      <main className="content">
+        {children}
+        <SiteFooter compact />
+      </main>
+
+      {menuOpen ? <button type="button" className="drawer-backdrop" onClick={closeMenu} aria-label="Close menu" /> : null}
+
+      <aside className={`drawer ${menuOpen ? "open" : ""}`}>
+        <div className="drawer-header">
+          <div>
+            <p className="eyebrow">Navigation</p>
+            <strong>Workspace Menu</strong>
+          </div>
+          <button type="button" className="secondary-button" onClick={closeMenu}>
+            Close
+          </button>
+        </div>
+
+        <p className="muted">Move between dashboard views, the facilities catalogue, and admin controls.</p>
+
         <nav className="nav">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/resources">Facilities Catalogue</Link>
-          <Link to="/admin/roles">Role Management</Link>
+          <Link to="/dashboard" onClick={closeMenu}>
+            Dashboard
+          </Link>
+          <Link to="/resources" onClick={closeMenu}>
+            Facilities Catalogue
+          </Link>
+          <Link to="/admin/roles" onClick={closeMenu}>
+            Role Management
+          </Link>
         </nav>
+
         {user ? (
           <a className="oauth-button" href={`${apiBaseUrl}/logout`}>
             End Session
           </a>
         ) : (
-          <Link className="oauth-button" to="/signin">
+          <Link className="oauth-button" to="/signin" onClick={closeMenu}>
             Continue with Google
           </Link>
         )}
+
         <div className="profile-card">
           <div className="profile-header">
             <div className="avatar-chip">{user?.avatarUrl ? <img alt={user.fullName} src={user.avatarUrl} /> : initials}</div>
@@ -53,7 +96,6 @@ export default function Shell({ title, children }) {
           ) : null}
         </div>
       </aside>
-      <main className="content">{children}</main>
     </div>
   );
 }

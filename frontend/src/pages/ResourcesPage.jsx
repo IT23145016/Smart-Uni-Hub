@@ -36,6 +36,7 @@ export default function ResourcesPage() {
   const [error, setError] = useState("");
 
   const isAdmin = user?.roles?.includes("ADMIN");
+  const activeCount = resources.filter((resource) => resource.status === "ACTIVE").length;
 
   useEffect(() => {
     loadResources();
@@ -160,20 +161,37 @@ export default function ResourcesPage() {
 
   return (
     <Shell title="Facilities Catalogue">
-      <section className="hero-card accent-card">
-        <p className="eyebrow">Member 1 Module</p>
-        <h2>Searchable campus spaces and equipment, ready for booking workflows.</h2>
-        <p>
-          This catalogue keeps lecture halls, labs, meeting rooms, and shared equipment visible with location,
-          capacity, availability windows, and operational status in one MongoDB-backed view.
-        </p>
+      <section className="resource-summary">
+        <article>
+          <strong>{resources.length}</strong>
+          <span>Total resources</span>
+        </article>
+        <article>
+          <strong>{activeCount}</strong>
+          <span>Ready to use</span>
+        </article>
+        <article>
+          <strong>{TYPE_OPTIONS.length}</strong>
+          <span>Resource categories</span>
+        </article>
+      </section>
+
+      <section className="resource-intro">
+        <div className="resource-intro-copy">
+          <p className="eyebrow">Facilities and Assets</p>
+          <h2>Browse campus spaces and equipment before creating a booking request.</h2>
+          <p>
+            Use this page to check what is available, compare capacity and location, and confirm whether a room,
+            lab, meeting space, or shared device is currently ready for use.
+          </p>
+        </div>
       </section>
 
       <section className="table-card">
         <div className="table-header">
           <div>
-            <p className="eyebrow">Search and Filter</p>
-            <h3>Find the right campus resource quickly.</h3>
+            <p className="eyebrow">Catalogue Filters</p>
+            <h3>Search by name, location, type, capacity, or current status.</h3>
           </div>
           <button type="button" onClick={() => loadResources()}>
             Refresh
@@ -183,7 +201,7 @@ export default function ResourcesPage() {
         <form className="filter-grid" onSubmit={submitFilters}>
           <label>
             Search
-            <input name="query" value={filters.query} onChange={handleFilterChange} placeholder="Name, code, amenity" />
+            <input name="query" value={filters.query} onChange={handleFilterChange} placeholder="Lecture hall, projector, lab" />
           </label>
           <label>
             Type
@@ -198,7 +216,7 @@ export default function ResourcesPage() {
           </label>
           <label>
             Location
-            <input name="location" value={filters.location} onChange={handleFilterChange} placeholder="Block, floor, building" />
+            <input name="location" value={filters.location} onChange={handleFilterChange} placeholder="Building or block" />
           </label>
           <label>
             Min capacity
@@ -238,8 +256,8 @@ export default function ResourcesPage() {
         <section className="table-card">
           <div className="table-header">
             <div>
-              <p className="eyebrow">Admin Resource Management</p>
-              <h3>{editingId ? "Update a resource" : "Create a new resource"}</h3>
+              <p className="eyebrow">Resource Administration</p>
+              <h3>{editingId ? "Update resource details" : "Add a new resource to the catalogue"}</h3>
             </div>
             {editingId ? (
               <button type="button" className="secondary-button" onClick={resetForm}>
@@ -345,7 +363,7 @@ export default function ResourcesPage() {
 
       <section className="resource-grid">
         {loading ? <div className="panel">Loading catalogue...</div> : null}
-        {!loading && resources.length === 0 ? <div className="panel">No resources matched your filters yet.</div> : null}
+        {!loading && resources.length === 0 ? <div className="panel">No resources matched your filters.</div> : null}
         {!loading
           ? resources.map((resource) => (
               <article className="resource-card" key={resource.id}>

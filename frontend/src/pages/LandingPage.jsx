@@ -1,25 +1,11 @@
 import { Link } from "react-router-dom";
+import SiteFooter from "../components/SiteFooter";
+import SiteHeader from "../components/SiteHeader";
 
 export default function LandingPage() {
   return (
     <div className="landing-page">
-      <header className="landing-nav">
-        <div>
-          <p className="eyebrow">Smart Campus Operations Hub</p>
-          <strong>Campus Command Center</strong>
-        </div>
-        <div className="landing-actions">
-          <Link className="ghost-link" to="/resources">
-            Browse Resources
-          </Link>
-          <Link className="ghost-link" to="/signin">
-            Sign In
-          </Link>
-          <Link className="solid-link" to="/signin">
-            Open Platform
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="landing-hero">
         <section className="landing-copy">
@@ -86,6 +72,8 @@ export default function LandingPage() {
           <p>Notify the right people, control roles centrally, and keep every status change visible.</p>
         </article>
       </section>
+
+      <SiteFooter />
     </div>
   );
 }
