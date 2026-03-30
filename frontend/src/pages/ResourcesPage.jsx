@@ -4,7 +4,7 @@ import { api } from "../services/api";
 
 const TYPE_OPTIONS = ["LECTURE_HALL", "LAB", "MEETING_ROOM", "EQUIPMENT"];
 const STATUS_OPTIONS = ["ACTIVE", "MAINTENANCE", "OUT_OF_SERVICE"];
-const DAY_OPTIONS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+const DAY_OPTIONS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
 
 const emptyForm = {
   resourceCode: "",
@@ -30,6 +30,8 @@ export default function ResourcesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const activeCount = resources.filter((resource) => resource.status === "ACTIVE").length;
+  const maintenanceCount = resources.filter((resource) => resource.status === "MAINTENANCE").length;
+  const outOfServiceCount = resources.filter((resource) => resource.status === "OUT_OF_SERVICE").length;
 
   useEffect(() => {
     loadResources();
@@ -70,19 +72,26 @@ export default function ResourcesPage() {
           <span>Ready to use</span>
         </article>
         <article>
-          <strong>{TYPE_OPTIONS.length}</strong>
-          <span>Resource categories</span>
+          <strong>{maintenanceCount}</strong>
+          <span>In maintenance</span>
+        </article>
+        <article>
+          <strong>{outOfServiceCount}</strong>
+          <span>Out of service</span>
         </article>
       </section>
 
       <section className="resource-intro">
         <div className="resource-intro-copy">
           <p className="eyebrow">Facilities and Assets</p>
-          <h2>Browse campus spaces and equipment before creating a booking request.</h2>
-          <p>
-            Use this page to check what is available, compare capacity and location, and confirm whether a room,
-            lab, meeting space, or shared device is currently ready for use.
-          </p>
+          <h2>Find the right space or equipment quickly.</h2>
+          <p className="resource-intro-note">Check availability, compare capacity, and confirm the best location before sending a booking request.</p>
+          <div className="resource-intro-tags">
+            <span>Rooms</span>
+            <span>Labs</span>
+            <span>Meeting spaces</span>
+            <span>Equipment</span>
+          </div>
         </div>
       </section>
 
@@ -92,7 +101,7 @@ export default function ResourcesPage() {
             <p className="eyebrow">Catalogue Filters</p>
             <h3>Search by name, location, type, capacity, or current status.</h3>
           </div>
-          <button type="button" onClick={() => loadResources()}>
+          <button type="button" className="secondary-button toolbar-button" onClick={() => loadResources()}>
             Refresh
           </button>
         </div>
@@ -165,15 +174,29 @@ export default function ResourcesPage() {
                   <span className={`status-pill ${resource.status.toLowerCase()}`}>{formatLabel(resource.status)}</span>
                 </div>
                 <p className="resource-copy">{resource.description || "No description supplied yet."}</p>
-                <div className="resource-meta">
-                  <span>{formatLabel(resource.type)}</span>
-                  <span>{resource.capacity} people</span>
-                  <span>{resource.location}</span>
+                <div className="resource-details-grid">
+                  <div className="resource-detail">
+                    <span className="resource-detail-label">Type</span>
+                    <strong>{formatLabel(resource.type)}</strong>
+                  </div>
+                  <div className="resource-detail">
+                    <span className="resource-detail-label">Capacity</span>
+                    <strong>{resource.capacity} people</strong>
+                  </div>
+                  <div className="resource-detail resource-detail-wide">
+                    <span className="resource-detail-label">Location</span>
+                    <strong>{resource.location}</strong>
+                  </div>
                 </div>
-                <div className="amenity-list">
-                  {resource.amenities.length ? resource.amenities.map((amenity) => <span key={amenity}>{amenity}</span>) : <span>No amenities listed</span>}
+                <div className="resource-section">
+                  <p className="resource-section-title">Amenities</p>
+                  <div className="amenity-list">
+                    {resource.amenities.length ? resource.amenities.map((amenity) => <span key={amenity}>{amenity}</span>) : <span>No amenities listed</span>}
+                  </div>
                 </div>
-                <div className="schedule-list">
+                <div className="resource-section">
+                  <p className="resource-section-title">Availability</p>
+                  <div className="schedule-list">
                   {resource.availabilityWindows.map((window) => (
                     <div key={`${resource.id}-${window.dayOfWeek}-${window.startTime}`}>
                       <strong>{formatLabel(window.dayOfWeek)}</strong>
@@ -182,6 +205,7 @@ export default function ResourcesPage() {
                       </span>
                     </div>
                   ))}
+                </div>
                 </div>
               </article>
             ))

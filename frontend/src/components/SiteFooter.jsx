@@ -1,37 +1,20 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function SiteFooter({ compact = false }) {
+  const { user } = useAuth();
+  const isAdmin = user?.roles?.includes("ADMIN");
+
   return (
     <footer className={`site-footer ${compact ? "compact" : ""}`}>
-      <div className="footer-top">
-        <div className="footer-brand" id="footer-about">
-          <p className="footer-kicker">Campus Operations Platform</p>
-          <h3>Smart Campus Operations Hub</h3>
-          <p className="muted">
-            A clear digital workspace for discovering facilities, managing shared resources, coordinating
-            maintenance, and supporting reliable day-to-day university operations.
-          </p>
-          <div className="footer-badges">
-            <span>Facilities</span>
-            <span>Maintenance</span>
-            <span>Access Control</span>
-          </div>
-        </div>
-
-        <div className="footer-highlight">
-          <p className="footer-heading">Platform Focus</p>
-          <strong>Helping teams find spaces, manage assets, and keep campus operations moving.</strong>
-        </div>
-      </div>
-
       <div className="footer-columns">
         <section>
           <p className="footer-heading">Platform</p>
           <div className="footer-links">
             <Link to="/">Home</Link>
             <Link to="/resources">Facilities Catalogue</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/admin/roles">Role Management</Link>
+            {isAdmin ? <Link to="/dashboard">Dashboard</Link> : null}
+            {isAdmin ? <Link to="/admin/roles">Role Management</Link> : null}
           </div>
         </section>
 

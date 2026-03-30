@@ -138,12 +138,15 @@ export default function ResourceAdminPage() {
     <Shell title="Resource Administration">
       <section className="resource-intro">
         <div className="resource-intro-copy">
-          <p className="eyebrow">Admin Workspace</p>
-          <h2>Manage the facilities and assets shown in the campus catalogue.</h2>
-          <p>
-            Create new records, update operational details, and keep availability information accurate for staff
-            and students who rely on the catalogue before making bookings.
-          </p>
+          <p className="eyebrow">Resource Administration</p>
+          <h2>Keep the campus catalogue accurate and up to date.</h2>
+          <p className="resource-intro-note">Create resources, update availability, and manage operational status from one admin workspace.</p>
+          <div className="resource-intro-tags">
+            <span>Create records</span>
+            <span>Update details</span>
+            <span>Manage status</span>
+            <span>Control availability</span>
+          </div>
         </div>
       </section>
 
@@ -165,7 +168,6 @@ export default function ResourceAdminPage() {
         <div className="table-header">
           <div>
             <p className="eyebrow">Current Catalogue</p>
-            <h3>Review, edit, or remove existing resources.</h3>
           </div>
           <button type="button" className="secondary-button" onClick={loadResources}>
             Refresh

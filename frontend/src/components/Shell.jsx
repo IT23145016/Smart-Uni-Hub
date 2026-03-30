@@ -57,28 +57,32 @@ export default function Shell({ title, children }) {
 
       <main className="content">
         {children}
-        <SiteFooter compact />
       </main>
+
+      <SiteFooter compact />
 
       {menuOpen ? <button type="button" className="drawer-backdrop" onClick={closeMenu} aria-label="Close menu" /> : null}
 
       <aside className={`drawer ${menuOpen ? "open" : ""}`}>
         <div className="drawer-header">
-          <div>
-            <p className="eyebrow">Navigation</p>
-            <strong>Workspace Menu</strong>
+          <div className="drawer-brand">
+            <span className="drawer-mark">SC</span>
+            <div>
+              <p className="profile-label">Quick menu</p>
+              <strong>Campus navigation</strong>
+            </div>
           </div>
-          <button type="button" className="secondary-button" onClick={closeMenu}>
-            Close
+          <button type="button" className="drawer-close-button" onClick={closeMenu} aria-label="Close menu">
+            <CloseIcon />
           </button>
         </div>
 
-        <p className="muted">Move between dashboard views, the facilities catalogue, and admin controls.</p>
-
         <nav className="nav">
-          <Link to="/dashboard" onClick={closeMenu}>
-            Dashboard
-          </Link>
+          {user?.roles?.includes("ADMIN") ? (
+            <Link to="/dashboard" onClick={closeMenu}>
+              Dashboard
+            </Link>
+          ) : null}
           <Link to="/resources" onClick={closeMenu}>
             Facilities Catalogue
           </Link>
@@ -171,6 +175,20 @@ function MenuIcon() {
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path
         d="M5 7h14M5 12h14M5 17h14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M7 7l10 10M17 7L7 17"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.8"
