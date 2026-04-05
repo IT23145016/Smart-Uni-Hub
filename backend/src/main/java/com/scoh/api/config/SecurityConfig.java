@@ -50,7 +50,9 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)
                                 .oidcUserService(customOidcUserService))
                         .successHandler(successHandler))
-                .logout(logout -> logout.logoutSuccessUrl("/"))
+                .logout(logout -> logout.logoutSuccessHandler(
+                        (request, response, authentication) ->
+                                response.sendRedirect(appProperties.getOauth2().getLogoutRedirectUrl())))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

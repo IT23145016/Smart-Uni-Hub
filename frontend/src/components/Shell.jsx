@@ -36,6 +36,11 @@ export default function Shell({ title, children }) {
           <a className="page-menubar-link" href="#footer-about">
             About Us
           </a>
+          {user ? (
+            <a className="page-menubar-logout" href={`${apiBaseUrl}/logout`}>
+              Log out
+            </a>
+          ) : null}
           {!user ? (
             <Link className="menu-icon-link" to="/signin" aria-label="Sign in">
               <SignInIcon />
