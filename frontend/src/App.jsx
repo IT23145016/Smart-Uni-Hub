@@ -9,6 +9,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import ResourceAdminPage from "./pages/ResourceAdminPage";
 import BookingsPage from "./pages/BookingsPage";
+import AdminBookingsPage from "./pages/AdminBookingsPage";
 
 export default function App() {
   return (
@@ -53,6 +54,14 @@ export default function App() {
           element={
             <AdminRoute>
               <ResourceAdminPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/bookings"
+          element={
+            <AdminRoute>
+              <AdminBookingsPage />
             </AdminRoute>
           }
         />

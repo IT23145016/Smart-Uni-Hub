@@ -91,7 +91,7 @@ export default function Shell({ title, children }) {
           <Link to="/resources" onClick={closeMenu}>
             Facilities Catalogue
           </Link>
-          {user ? (
+          {user && !user.roles?.includes("ADMIN") ? (
             <Link to="/bookings" onClick={closeMenu}>
               My Bookings
             </Link>
@@ -100,6 +100,9 @@ export default function Shell({ title, children }) {
             <>
               <Link to="/admin/resources" onClick={closeMenu}>
                 Resource Administration
+              </Link>
+              <Link to="/admin/bookings" onClick={closeMenu}>
+                Booking Requests
               </Link>
               <Link to="/admin/roles" onClick={closeMenu}>
                 Role Management

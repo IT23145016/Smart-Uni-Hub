@@ -66,5 +66,16 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload)
     }),
-  getUserBookings: () => request("/api/bookings")
+  getUserBookings: () => request("/api/bookings"),
+  cancelBooking: (bookingId) =>
+    request(`/api/bookings/${bookingId}`, {
+      method: "DELETE"
+    }),
+  getAllBookings: () => request("/api/bookings/admin"),
+  getPendingBookings: () => request("/api/bookings/admin/pending"),
+  updateBookingStatus: (bookingId, payload) =>
+    request(`/api/bookings/admin/${bookingId}/status`, {
+      method: "PATCH",
+      body: JSON.stringify(payload)
+    })
 };

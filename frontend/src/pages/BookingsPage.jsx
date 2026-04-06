@@ -6,6 +6,7 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [cancellingBooking, setCancellingBooking] = useState(null);
 
   useEffect(() => {
     loadBookings();
@@ -21,6 +22,18 @@ export default function BookingsPage() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function cancelBooking(bookingId) {
+    setCancellingBooking(bookingId);
+    try {
+      await api.cancelBooking(bookingId);
+      await loadBookings();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setCancellingBooking(null);
     }
   }
 
@@ -79,6 +92,24 @@ export default function BookingsPage() {
                       <span>{booking.adminNotes}</span>
                     </div>
                   ) : null}
+                </div>
+                <div className="booking-actions">
+                  {booking.status === "APPROVED" ? (
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={() => cancelBooking(booking.id)}
+                      disabled={cancellingBooking === booking.id}
+                    >
+                      {cancellingBooking === booking.id ? "Cancelling..." : "Cancel Booking"}
+                    </button>
+                  ) : (
+                    <span className="status-note">
+                      {booking.status === "PENDING" ? "Waiting for approval" :
+                       booking.status === "REJECTED" ? "Booking rejected" :
+                       booking.status === "CANCELLED" ? "Booking cancelled" : "No actions available"}
+                    </span>
+                  )}
                 </div>
               </article>
             ))}

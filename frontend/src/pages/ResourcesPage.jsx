@@ -99,8 +99,9 @@ export default function ResourcesPage() {
         resourceId: bookingResource.id,
         purpose: bookingForm.purpose,
         attendees: Number(bookingForm.attendees),
-        startTime: new Date(bookingForm.startTime).toISOString(),
-        endTime: new Date(bookingForm.endTime).toISOString()
+        // The backend expects a LocalDateTime string, so send the plain datetime-local value.
+        startTime: bookingForm.startTime,
+        endTime: bookingForm.endTime
       });
       setBookingMessage("Booking request submitted successfully.");
       setBookingForm((current) => ({ ...current, purpose: "", attendees: 1, startTime: "", endTime: "" }));
