@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import SiteFooter from "./SiteFooter";
+
+const NOTIFICATION_POLL_INTERVAL_MS = 15000;
 
 export default function Shell({ title, children }) {
   const { user, loading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+  const notificationHref = user?.roles?.includes("ADMIN") ? "/dashboard#notifications" : "/bookings#notifications";
   const initials = user?.fullName
     ? user.fullName
         .split(" ")
@@ -19,6 +24,42 @@ export default function Shell({ title, children }) {
   function closeMenu() {
     setMenuOpen(false);
   }
+
+  useEffect(() => {
+    async function loadUnreadCount() {
+      if (!user) {
+        setUnreadCount(0);
+        return;
+      }
+
+      try {
+        const unread = await api.getUnreadCount();
+        setUnreadCount(unread.count || 0);
+      } catch {
+        setUnreadCount(0);
+      }
+    }
+
+    loadUnreadCount();
+
+    if (!user) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(loadUnreadCount, NOTIFICATION_POLL_INTERVAL_MS);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        loadUnreadCount();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [user]);
 
   return (
     <div className="shell">
@@ -36,6 +77,12 @@ export default function Shell({ title, children }) {
           <a className="page-menubar-link" href="#footer-about">
             About Us
           </a>
+          {user ? (
+            <Link className="menu-icon-link notification-bell-link" to={notificationHref} aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}>
+              <BellIcon />
+              {unreadCount ? <span className="notification-badge">{unreadCount > 99 ? "99+" : unreadCount}</span> : null}
+            </Link>
+          ) : null}
           {user ? (
             <a className="page-menubar-logout" href={`${apiBaseUrl}/logout`}>
               Log out
@@ -202,6 +249,28 @@ function CloseIcon() {
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path
         d="M7 7l10 10M17 7L7 17"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 5.25a4.25 4.25 0 0 0-4.25 4.25v2.42c0 .63-.2 1.25-.58 1.76L5.9 15.4A1 1 0 0 0 6.7 17h10.6a1 1 0 0 0 .8-1.6l-1.27-1.72a3 3 0 0 1-.58-1.76V9.5A4.25 4.25 0 0 0 12 5.25Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.75 18a2.25 2.25 0 0 0 4.5 0"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.8"
