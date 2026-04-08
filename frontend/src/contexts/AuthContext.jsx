@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
         setAuthMessage("");
       } catch (err) {
         setUser(null);
-        setAuthMessage(err.message || "");
+        setAuthMessage(err.status === 401 ? "" : err.message || "");
       } finally {
         setLoading(false);
       }

@@ -12,7 +12,9 @@ async function request(path, options = {}) {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.message || "Request failed");
+    const error = new Error(errorBody.message || "Request failed");
+    error.status = response.status;
+    throw error;
   }
 
   if (response.status === 204) {
