@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { api } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -6,10 +7,12 @@ const POLL_INTERVAL_MS = 15000;
 
 export default function NotificationPanel() {
   const { user } = useAuth();
+  const location = useLocation();
   const [notifications, setNotifications] = useState([]);
   const [count, setCount] = useState(0);
   const [error, setError] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const panelRef = useRef(null);
   const unreadIdsRef = useRef(new Set());
   const hasLoadedRef = useRef(false);
 
@@ -93,6 +96,18 @@ export default function NotificationPanel() {
     return () => window.clearTimeout(timeoutId);
   }, [alertMessage]);
 
+  useEffect(() => {
+    if (location.hash !== "#notifications" || !panelRef.current) {
+      return undefined;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [location.hash, notifications.length, error]);
+
   async function markOneRead(notificationId) {
     try {
       await api.markNotificationRead(notificationId);
@@ -136,7 +151,7 @@ export default function NotificationPanel() {
   }
 
   return (
-    <section className="panel">
+    <section className="panel" id="notifications" ref={panelRef}>
       <div className="panel-header">
         <div>
           <p className="eyebrow">Live Inbox</p>
