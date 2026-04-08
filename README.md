@@ -1,86 +1,92 @@
 # Smart Campus Operations Hub
 
-This repository contains a Smart Campus Operations Hub submission with a clearly identifiable Member 4 implementation slice for the IT3030 PAF assignment.
+Smart Campus Operations Hub is a group project for the IT3030 PAF assignment. The system helps manage campus resources, bookings, notifications, user roles, and authentication in one shared platform.
+
+## Project Overview
+
+This repository contains a full-stack application with:
+
+- A Spring Boot backend for APIs, business logic, security, and MongoDB persistence
+- A React + Vite frontend for the user interface
+- Shared functionality that supports all four team members' modules in a single system
 
 ## Member Allocation
 
 - Member 1: facilities catalogue and resource management
 - Member 2: booking workflow and conflict checking
 - Member 3: incident ticketing and technician updates
-- Member 4: notifications, role management, and OAuth 2.0 integration improvements
+- Member 4: notifications, role management, and OAuth 2.0 integration
 
-## Member 4 Scope
+## Common Features Across All 4 Members
 
-Member 4 is responsible for three connected areas:
+- Centralized campus resource management
+- Booking creation, review, approval, rejection, and cancellation flows
+- Notification support for important user and system updates
+- Role-based access control for different user types
+- Secure authentication and Google OAuth login
+- MongoDB persistence for users, resources, bookings, and notifications
+- Frontend and backend integration through REST APIs
 
-- Notification management for booking, role, and system updates
-- Role-based access control for `ADMIN`, `USER`, and `TECHNICIAN`
-- Google OAuth login with MongoDB-backed user persistence
+## Main Functional Areas
 
-## Member 4 Requirements Coverage
+### Resource Management
+
+- Create and manage campus resources
+- Update resource details, status, and availability windows
+- View available resources from the frontend
+
+### Booking Management
+
+- Submit bookings for resources
+- Prevent conflicting bookings
+- Review and update booking statuses
+- Track pending, approved, rejected, and cancelled bookings
 
 ### Notifications
 
-Implemented backend APIs:
+- View user notifications
+- Track unread notification counts
+- Mark single or all notifications as read
+- Delete notifications
+- Create automatic notifications for booking, role, and ticket-related events
 
+### User and Role Management
+
+- Manage users with role-based permissions
+- Assign roles such as `ADMIN`, `USER`, and `TECHNICIAN`
+- Activate, deactivate, and delete user accounts
+
+### Authentication and Security
+
+- Spring Security based route and API protection
+- Google OAuth login support
+- Authenticated user profile lookup
+- Restricted admin and technician operations
+
+## Backend API Highlights
+
+- `GET /api/health`
+- `GET /api/auth/me`
+- `GET /api/resources`
+- `POST /api/resources`
+- `PUT /api/resources/{resourceId}`
+- `PATCH /api/resources/{resourceId}/status`
+- `DELETE /api/resources/{resourceId}`
+- `GET /api/bookings`
+- `POST /api/bookings`
+- `PATCH /api/bookings/{bookingId}/status`
 - `GET /api/notifications`
 - `GET /api/notifications/unread-count`
 - `PATCH /api/notifications/{notificationId}/read`
 - `PATCH /api/notifications/read-all`
-- `POST /api/notifications` (`ADMIN`)
+- `POST /api/notifications`
 - `DELETE /api/notifications/{notificationId}`
-- `POST /api/integrations/tickets/notify` (`ADMIN` or `TECHNICIAN`)
-
-Implemented UI:
-
-- Notification panel for signed-in users
-- Unread count display
-- Mark-one and mark-all as read actions
-- Delete notification action
-- Automatic booking submission, booking status, and role-change notifications
-- Ticket-update notification integration endpoint for Member 3
-
-### Role Management
-
-Implemented backend APIs:
-
 - `GET /api/admin/users`
 - `POST /api/admin/users`
 - `PUT /api/admin/users/{userId}/roles`
 - `PATCH /api/admin/users/{userId}/status`
 - `DELETE /api/admin/users/{userId}`
-
-Implemented UI:
-
-- Admin role management page
-- Create user form
-- Role assignment controls
-- Activate/deactivate account control
-- Delete user action
-
-### OAuth Integration Improvements
-
-Implemented features:
-
-- Google OAuth sign-in through Spring Security OAuth2 Client
-- OAuth user creation and update in MongoDB
-- Preserved role assignments across repeated logins
-- Logout redirect support
-- Inactive accounts are blocked from logging in
-- Bootstrap support for Member 4 test accounts
-
-Bootstrap emails used for Member 4 testing:
-
-- Admin: `mklskodithuwakku@gmail.com`
-- User: `kmls19kodituwakku@gmail.com`
-
-## Security
-
-- Role-based authorization using Spring Security
-- Admin-only user management endpoints
-- Validated request DTOs
-- Protected authenticated endpoints
-- User-owned notification modifications only
+- `POST /api/integrations/tickets/notify`
 
 ## Tech Stack
 
@@ -92,11 +98,11 @@ Bootstrap emails used for Member 4 testing:
 
 1. Create `backend/.env` from `backend/.env.example`.
 2. Create `frontend/.env` from `frontend/.env.example` if needed.
-3. Set MongoDB and Google OAuth credentials in `backend/.env`.
+3. Add MongoDB and Google OAuth credentials.
 4. Start the backend on port `8081`.
 5. Start the frontend on port `5174`.
 
-Backend run:
+## Run the Backend
 
 ```powershell
 cd backend
@@ -105,7 +111,7 @@ $env:Path="$env:JAVA_HOME\bin;$env:Path"
 .\apache-maven-3.9.9\bin\mvn.cmd spring-boot:run
 ```
 
-Frontend run:
+## Run the Frontend
 
 ```powershell
 cd frontend
@@ -115,8 +121,7 @@ npm run dev
 
 ## Integration Notes
 
-- Booking approval, rejection, and cancellation events create notifications automatically.
-- Booking creation now creates a pending-review notification automatically.
-- Role changes create user-facing notifications for auditability.
-- Member 3 ticket workflows can integrate by calling `/api/integrations/tickets/notify`.
-- OAuth login creates or updates a MongoDB user record and keeps previously assigned roles.
+- Resource, booking, notification, and user modules are designed to work together as one platform.
+- Booking and ticket workflows can trigger notifications for users.
+- OAuth login creates or updates user records while preserving roles.
+- Admin features are protected through role-based authorization.
