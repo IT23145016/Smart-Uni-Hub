@@ -4,18 +4,15 @@ import com.scoh.api.domain.Booking;
 import com.scoh.api.domain.BookingStatus;
 import com.scoh.api.domain.CampusResource;
 import com.scoh.api.domain.AvailabilityWindow;
-import com.scoh.api.domain.NotificationType;
 import com.scoh.api.domain.Role;
 import com.scoh.api.domain.UserAccount;
 import com.scoh.api.dto.BookingCreateRequest;
 import com.scoh.api.dto.BookingResponse;
 import com.scoh.api.dto.BookingStatusUpdateRequest;
-import com.scoh.api.dto.NotificationCreateRequest;
 import com.scoh.api.exception.BookingConflictException;
 import com.scoh.api.exception.ForbiddenOperationException;
 import com.scoh.api.repository.BookingRepository;
 import com.scoh.api.repository.CampusResourceRepository;
-import com.scoh.api.service.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -23,23 +20,19 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
   private final BookingRepository bookingRepository;
   private final CampusResourceRepository resourceRepository;
-  private final NotificationService notificationService;
 
   public BookingService(
     BookingRepository bookingRepository,
-    CampusResourceRepository resourceRepository,
-    NotificationService notificationService
+    CampusResourceRepository resourceRepository
   ) {
     this.bookingRepository = bookingRepository;
     this.resourceRepository = resourceRepository;
-    this.notificationService = notificationService;
   }
 
   public BookingResponse createBooking(String userId, BookingCreateRequest request) {
@@ -62,14 +55,6 @@ public class BookingService {
     );
 
     booking = bookingRepository.save(booking);
-    notificationService.createNotification(new NotificationCreateRequest(
-      userId,
-      NotificationType.BOOKING_CREATED,
-      "Booking submitted",
-      "Your booking request has been submitted and is waiting for admin review.",
-      "/bookings",
-      Map.of("bookingId", booking.getId(), "status", booking.getStatus().toString())
-    ));
     return toResponse(booking);
   }
 
@@ -231,7 +216,6 @@ public class BookingService {
     booking.setUpdatedAt(LocalDateTime.now());
     booking = bookingRepository.save(booking);
 
-    createStatusNotification(booking, newStatus);
     return toResponse(booking);
   }
 
@@ -254,15 +238,6 @@ public class BookingService {
     booking.setStatus(BookingStatus.CANCELLED);
     booking.setUpdatedAt(LocalDateTime.now());
     booking = bookingRepository.save(booking);
-
-    notificationService.createNotification(new NotificationCreateRequest(
-      booking.getUserId(),
-      NotificationType.BOOKING_CANCELLED,
-      "Booking cancelled",
-      "Your booking has been cancelled.",
-      "/bookings",
-      Map.of("bookingId", booking.getId(), "status", booking.getStatus().toString())
-    ));
 
     return toResponse(booking);
   }
@@ -351,37 +326,6 @@ public class BookingService {
         )
       );
     }
-  }
-
-  private void createStatusNotification(Booking booking, BookingStatus status) {
-    String title;
-    String message;
-    NotificationType type;
-
-    if (status == BookingStatus.APPROVED) {
-      title = "Booking approved";
-      message = "Your booking request has been approved.";
-      type = NotificationType.BOOKING_APPROVED;
-    } else if (status == BookingStatus.REJECTED) {
-      title = "Booking rejected";
-      message = "Your booking request was rejected.";
-      type = NotificationType.BOOKING_REJECTED;
-    } else if (status == BookingStatus.CANCELLED) {
-      title = "Booking cancelled";
-      message = "Your booking request has been cancelled by an administrator.";
-      type = NotificationType.BOOKING_CANCELLED;
-    } else {
-      return;
-    }
-
-    notificationService.createNotification(new NotificationCreateRequest(
-      booking.getUserId(),
-      type,
-      title,
-      message,
-      "/bookings",
-      Map.of("bookingId", booking.getId(), "status", status.toString())
-    ));
   }
 
   private BookingResponse toResponse(Booking booking) {

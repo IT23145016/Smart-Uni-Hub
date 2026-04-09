@@ -2,7 +2,6 @@ package com.scoh.api.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.scoh.api.domain.Role;
@@ -24,9 +23,6 @@ class UserAccountServiceTest {
 
     @Mock
     private UserAccountRepository userAccountRepository;
-
-    @Mock
-    private NotificationService notificationService;
 
     @InjectMocks
     private UserAccountService userAccountService;
@@ -63,13 +59,6 @@ class UserAccountServiceTest {
         when(userAccountRepository.save(org.mockito.ArgumentMatchers.any(UserAccount.class))).thenReturn(saved);
 
         userAccountService.createUser(request, "admin-1");
-
-        verify(notificationService).createAccountCreatedNotification(saved);
-        verify(notificationService).createAdminAuditNotification(
-                org.mockito.ArgumentMatchers.eq("admin-1"),
-                org.mockito.ArgumentMatchers.eq("User created"),
-                org.mockito.ArgumentMatchers.contains("new.user@example.com"),
-                org.mockito.ArgumentMatchers.anyMap());
     }
 
     @Test
