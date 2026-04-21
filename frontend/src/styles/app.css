@@ -998,6 +998,12 @@ p {
   color: #f7f1e8;
 }
 
+.notification-time {
+  margin: -0.2rem 0 0.75rem;
+  color: #68746e;
+  font-size: 0.85rem;
+}
+
 .notification-card {
   padding: 1rem;
   border-radius: 18px;
@@ -1687,6 +1693,13 @@ td {
   color: #4a4a4a;
 }
 
+.linked-item-highlight {
+  border-color: rgba(214, 108, 63, 0.5);
+  box-shadow:
+    0 18px 40px rgba(16, 33, 29, 0.07),
+    inset 0 0 0 1px rgba(214, 108, 63, 0.18);
+}
+
 .booking-empty-state {
   display: flex;
   flex-direction: column;
@@ -1710,12 +1723,17 @@ td {
   grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
+.role-management-filters {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 @media (max-width: 1100px) {
   .booking-overview-grid,
   .booking-meta-grid,
   .admin-booking-row .booking-meta-grid,
   .booking-filter-grid,
-  .admin-booking-filters {
+  .admin-booking-filters,
+  .role-management-filters {
     grid-template-columns: 1fr;
   }
 }

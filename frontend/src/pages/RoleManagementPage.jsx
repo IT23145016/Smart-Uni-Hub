@@ -16,6 +16,11 @@ export default function RoleManagementPage() {
   const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
+  const [filters, setFilters] = useState({
+    query: "",
+    role: "all",
+    status: "all"
+  });
   const [form, setForm] = useState(EMPTY_FORM);
   const [updatingUserId, setUpdatingUserId] = useState("");
   const [deletingUserId, setDeletingUserId] = useState("");
@@ -91,6 +96,11 @@ export default function RoleManagementPage() {
     setForm((current) => ({ ...current, [name]: value }));
   }
 
+  function handleFilterChange(event) {
+    const { name, value } = event.target;
+    setFilters((current) => ({ ...current, [name]: value }));
+  }
+
   function handleRoleSelection(role) {
     setForm((current) => ({
       ...current,
@@ -143,6 +153,19 @@ export default function RoleManagementPage() {
       setDeletingUserId("");
     }
   }
+
+  const filteredUsers = users.filter((user) => {
+    const query = filters.query.trim().toLowerCase();
+    const matchesQuery = !query
+      || user.fullName?.toLowerCase().includes(query)
+      || user.email?.toLowerCase().includes(query);
+    const matchesRole = filters.role === "all" || user.roles.includes(filters.role);
+    const matchesStatus = filters.status === "all"
+      || (filters.status === "active" && user.active)
+      || (filters.status === "inactive" && !user.active);
+
+    return matchesQuery && matchesRole && matchesStatus;
+  });
 
   return (
     <Shell title="Role Management">
@@ -201,6 +224,45 @@ export default function RoleManagementPage() {
             Refresh
           </button>
         </div>
+        <form className="filter-grid role-management-filters" onSubmit={(event) => event.preventDefault()}>
+          <label>
+            Search
+            <input
+              name="query"
+              value={filters.query}
+              onChange={handleFilterChange}
+              placeholder="Search by name or email"
+            />
+          </label>
+          <label>
+            Role
+            <select name="role" value={filters.role} onChange={handleFilterChange}>
+              <option value="all">All roles</option>
+              {ROLE_OPTIONS.map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Status
+            <select name="status" value={filters.status} onChange={handleFilterChange}>
+              <option value="all">All users</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </label>
+          <div className="filter-actions">
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setFilters({ query: "", role: "all", status: "all" })}
+            >
+              Clear filters
+            </button>
+          </div>
+        </form>
         <table>
           <thead>
             <tr>
@@ -212,7 +274,7 @@ export default function RoleManagementPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.id}>
                 <td>{user.fullName}</td>
                 <td>{user.email}</td>
@@ -259,6 +321,7 @@ export default function RoleManagementPage() {
             ))}
           </tbody>
         </table>
+        {!filteredUsers.length ? <p className="muted">No users matched the selected filters.</p> : null}
       </section>
     </Shell>
   );

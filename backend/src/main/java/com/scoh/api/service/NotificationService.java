@@ -4,6 +4,7 @@ import com.scoh.api.domain.Notification;
 import com.scoh.api.domain.Booking;
 import com.scoh.api.domain.NotificationType;
 import com.scoh.api.domain.IncidentTicket;
+import com.scoh.api.domain.Role;
 import com.scoh.api.domain.UserAccount;
 import com.scoh.api.dto.NotificationCreateRequest;
 import com.scoh.api.dto.NotificationResponse;
@@ -52,7 +53,7 @@ public class NotificationService {
                 approved
                         ? "Your booking request has been approved."
                         : "Your booking request was rejected.",
-                "/bookings",
+                "/bookings?bookingId=" + booking.getId(),
                 Map.of("bookingId", booking.getId(), "status", booking.getStatus().toString())));
     }
 
@@ -69,7 +70,7 @@ public class NotificationService {
                 NotificationType.TICKET_STATUS_CHANGED,
                 "Ticket status updated",
                 "Ticket \"" + ticket.getTitle() + "\" moved from " + previousStatus + " to " + nextStatus + ".",
-                "/tickets",
+                resolveTicketTargetUrl(recipientUserId, ticket.getId()),
                 Map.of(
                         "ticketId", ticket.getId(),
                         "previousStatus", previousStatus,
@@ -88,7 +89,7 @@ public class NotificationService {
                 NotificationType.TICKET_COMMENT_ADDED,
                 "New comment on your ticket",
                 commenterName + " added a comment to ticket \"" + ticket.getTitle() + "\".",
-                "/tickets",
+                resolveTicketTargetUrl(recipientUserId, ticket.getId()),
                 Map.of("ticketId", ticket.getId())));
     }
 
@@ -152,5 +153,13 @@ public class NotificationService {
             case TICKET_COMMENT_ADDED -> user.getNotificationPreferences().isTicketCommentsEnabled();
             default -> true;
         };
+    }
+
+    private String resolveTicketTargetUrl(String userId, String ticketId) {
+        UserAccount user = userAccountRepository.findById(userId).orElse(null);
+        if (user != null && (user.getRoles().contains(Role.ADMIN) || user.getRoles().contains(Role.TECHNICIAN))) {
+            return "/tickets/manage?ticketId=" + ticketId;
+        }
+        return "/tickets?ticketId=" + ticketId;
     }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -15,6 +15,7 @@ const FILTER_OPTIONS = [
 export default function NotificationPanel() {
   const { user, setUser } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [count, setCount] = useState(0);
   const [error, setError] = useState("");
@@ -181,6 +182,27 @@ export default function NotificationPanel() {
     }
   }
 
+  async function openNotificationTarget(notification) {
+    try {
+      if (!notification.read) {
+        await api.markNotificationRead(notification.id);
+      }
+
+      setNotifications((current) => {
+        const next = current.map((item) => (item.id === notification.id ? { ...item, read: true } : item));
+        syncUnreadState(next);
+        return next;
+      });
+
+      if (notification.targetUrl) {
+        navigate(notification.targetUrl);
+      }
+      setError("");
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   function handlePreferenceChange(event) {
     const { name, checked } = event.target;
     setPreferences((current) => ({ ...current, [name]: checked }));
@@ -296,8 +318,14 @@ export default function NotificationPanel() {
           <article className={`notification-card ${notification.read ? "read" : ""}`} key={notification.id}>
             <span className="badge">{notification.type.replaceAll("_", " ")}</span>
             <h3>{notification.title}</h3>
+            <p className="notification-time">{formatNotificationTimestamp(notification.createdAt)}</p>
             <p>{notification.message}</p>
             <div className="booking-actions">
+              {notification.targetUrl ? (
+                <button type="button" onClick={() => openNotificationTarget(notification)}>
+                  View related item
+                </button>
+              ) : null}
               {!notification.read ? (
                 <button type="button" className="secondary-button" onClick={() => markOneRead(notification.id)}>
                   Mark read
@@ -313,6 +341,53 @@ export default function NotificationPanel() {
       </div>
     </section>
   );
+}
+
+function formatNotificationTimestamp(value) {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const minuteMs = 60 * 1000;
+  const hourMs = 60 * minuteMs;
+  const dayMs = 24 * hourMs;
+
+  if (diffMs < minuteMs) {
+    return "Just now";
+  }
+
+  if (diffMs < hourMs) {
+    const minutes = Math.floor(diffMs / minuteMs);
+    return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+  }
+
+  if (diffMs < dayMs && date.toDateString() === now.toDateString()) {
+    return `Today ${date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
+  }
+
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  if (date.toDateString() === yesterday.toDateString()) {
+    return `Yesterday ${date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
+  }
+
+  if (diffMs < 7 * dayMs) {
+    return date.toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" });
+  }
+
+  return date.toLocaleString([], {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit"
+  });
 }
 
 function matchesFilter(notification, filter) {

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Shell from "../components/Shell";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../services/api";
@@ -14,6 +15,7 @@ const INITIAL_FORM = {
 };
 
 export default function TicketsPage() {
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [tickets, setTickets] = useState([]);
   const [resources, setResources] = useState([]);
@@ -25,6 +27,7 @@ export default function TicketsPage() {
   const [loading, setLoading] = useState(false);
   const [commentDrafts, setCommentDrafts] = useState({});
   const [editingCommentId, setEditingCommentId] = useState("");
+  const ticketRefs = useRef({});
 
   useEffect(() => {
     loadPage();
@@ -136,6 +139,19 @@ export default function TicketsPage() {
   function canManageComment(update) {
     return update.updatedByUserId === user?.id || user?.roles?.includes("ADMIN");
   }
+
+  const highlightedTicketId = searchParams.get("ticketId");
+
+  useEffect(() => {
+    if (!highlightedTicketId) {
+      return;
+    }
+
+    const element = ticketRefs.current[highlightedTicketId];
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [highlightedTicketId, tickets]);
 
   return (
     <Shell title="Incident Tickets">
@@ -268,7 +284,13 @@ export default function TicketsPage() {
 
         <div className="ticket-list">
           {tickets.map((ticket) => (
-            <article className="ticket-card" key={ticket.id}>
+            <article
+              className={`ticket-card ${highlightedTicketId === ticket.id ? "linked-item-highlight" : ""}`}
+              key={ticket.id}
+              ref={(element) => {
+                ticketRefs.current[ticket.id] = element;
+              }}
+            >
               <div className="ticket-card-head">
                 <div>
                   <p className="eyebrow">{ticket.category} | {ticket.priority} priority</p>

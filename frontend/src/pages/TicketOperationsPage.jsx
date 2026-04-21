@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Shell from "../components/Shell";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../services/api";
 
 export default function TicketOperationsPage() {
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [tickets, setTickets] = useState([]);
   const [technicians, setTechnicians] = useState([]);
@@ -11,6 +13,7 @@ export default function TicketOperationsPage() {
   const [filters, setFilters] = useState({ status: "all", priority: "all", location: "" });
   const [commentDrafts, setCommentDrafts] = useState({});
   const [statusForms, setStatusForms] = useState({});
+  const ticketRefs = useRef({});
 
   useEffect(() => {
     loadData(filters);
@@ -87,6 +90,19 @@ export default function TicketOperationsPage() {
     }
   }
 
+  const highlightedTicketId = searchParams.get("ticketId");
+
+  useEffect(() => {
+    if (!highlightedTicketId) {
+      return;
+    }
+
+    const element = ticketRefs.current[highlightedTicketId];
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [highlightedTicketId, tickets]);
+
   return (
     <Shell title="Ticket Operations">
       <section className="hero-card accent-card">
@@ -141,7 +157,13 @@ export default function TicketOperationsPage() {
         {tickets.map((ticket) => {
           const form = statusForms[ticket.id] || { status: ticket.status, resolutionNote: "", rejectionReason: "" };
           return (
-            <article className="ticket-card" key={ticket.id}>
+            <article
+              className={`ticket-card ${highlightedTicketId === ticket.id ? "linked-item-highlight" : ""}`}
+              key={ticket.id}
+              ref={(element) => {
+                ticketRefs.current[ticket.id] = element;
+              }}
+            >
               <div className="ticket-card-head">
                 <div>
                   <p className="eyebrow">{ticket.category} | {ticket.priority} priority</p>
