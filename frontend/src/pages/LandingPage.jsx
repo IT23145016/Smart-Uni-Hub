@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import SiteFooter from "../components/SiteFooter";
 import SiteHeader from "../components/SiteHeader";
+import SupportAssistant from "../components/SupportAssistant";
 
 export default function LandingPage() {
   return (
@@ -74,6 +75,7 @@ export default function LandingPage() {
       </section>
 
       <SiteFooter />
+      <SupportAssistant />
     </div>
   );
 }

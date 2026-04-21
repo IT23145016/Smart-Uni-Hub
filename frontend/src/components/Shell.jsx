@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { api } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import SiteFooter from "./SiteFooter";
+import SupportAssistant from "./SupportAssistant";
 
 const NOTIFICATION_POLL_INTERVAL_MS = 15000;
 
@@ -149,6 +150,7 @@ export default function Shell({ title, children }) {
       </main>
 
       <SiteFooter compact />
+      <SupportAssistant />
 
       {menuOpen ? <button type="button" className="drawer-backdrop" onClick={closeMenu} aria-label="Close menu" /> : null}
 
