@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { api } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import SiteFooter from "./SiteFooter";
+import SupportAssistant from "./SupportAssistant";
 
 const NOTIFICATION_POLL_INTERVAL_MS = 15000;
 
@@ -12,7 +13,7 @@ export default function Shell({ title, children }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [notificationAlert, setNotificationAlert] = useState("");
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
-  const notificationHref = user?.roles?.includes("ADMIN") ? "/dashboard#notifications" : "/bookings#notifications";
+  const notificationHref = "/notifications";
   const knownUnreadIdsRef = useRef([]);
   const initials = user?.fullName
     ? user.fullName
@@ -149,6 +150,7 @@ export default function Shell({ title, children }) {
       </main>
 
       <SiteFooter compact />
+      <SupportAssistant />
 
       {menuOpen ? <button type="button" className="drawer-backdrop" onClick={closeMenu} aria-label="Close menu" /> : null}
 
@@ -183,6 +185,11 @@ export default function Shell({ title, children }) {
           {user ? (
             <Link to="/tickets" onClick={closeMenu}>
               Incident Tickets
+            </Link>
+          ) : null}
+          {user ? (
+            <Link to="/notifications" onClick={closeMenu}>
+              Notifications
             </Link>
           ) : null}
           {user?.roles?.some((role) => role === "ADMIN" || role === "TECHNICIAN") ? (

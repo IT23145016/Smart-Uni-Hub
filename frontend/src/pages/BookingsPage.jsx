@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import NotificationPanel from "../components/NotificationPanel";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Shell from "../components/Shell";
 import { api } from "../services/api";
 
 const STATUS_ORDER = ["PENDING", "APPROVED", "REJECTED", "CANCELLED"];
 
 export default function BookingsPage() {
+  const [searchParams] = useSearchParams();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -15,6 +16,7 @@ export default function BookingsPage() {
     startDate: "",
     endDate: ""
   });
+  const bookingRefs = useRef({});
 
   useEffect(() => {
     loadBookings(filters);
@@ -59,6 +61,18 @@ export default function BookingsPage() {
     counts[status] = bookings.filter((booking) => booking.status === status).length;
     return counts;
   }, { PENDING: 0, APPROVED: 0, REJECTED: 0, CANCELLED: 0 });
+  const highlightedBookingId = searchParams.get("bookingId");
+
+  useEffect(() => {
+    if (!highlightedBookingId) {
+      return;
+    }
+
+    const element = bookingRefs.current[highlightedBookingId];
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [highlightedBookingId, bookings]);
 
   return (
     <Shell title="My Bookings">
@@ -141,7 +155,13 @@ export default function BookingsPage() {
           ) : (
             <div className="booking-results">
               {bookings.map((booking) => (
-                <article className="booking-row" key={booking.id}>
+                <article
+                  className={`booking-row ${highlightedBookingId === booking.id ? "linked-item-highlight" : ""}`}
+                  key={booking.id}
+                  ref={(element) => {
+                    bookingRefs.current[booking.id] = element;
+                  }}
+                >
                   <div className="booking-row-main">
                     <div className="booking-row-title">
                       <div>
@@ -204,8 +224,6 @@ export default function BookingsPage() {
           )}
         </section>
       </section>
-
-      <NotificationPanel />
     </Shell>
   );
 }
