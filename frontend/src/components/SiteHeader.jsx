@@ -32,7 +32,7 @@ export default function SiteHeader() {
 
         {!user ? (
           <Link className="site-header-login" to="/signin">
-            Login
+            Sign In
           </Link>
         ) : null}
 

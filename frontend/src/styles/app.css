@@ -2,17 +2,17 @@
   color-scheme: light;
   font-family: "Space Grotesk", sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(255, 191, 104, 0.5), transparent 24%),
-    radial-gradient(circle at 80% 8%, rgba(30, 98, 87, 0.24), transparent 18%),
-    radial-gradient(circle at 50% 100%, rgba(214, 108, 63, 0.12), transparent 28%),
-    linear-gradient(145deg, #f8f0e4 0%, #efe2ca 42%, #e5efe8 100%);
+    radial-gradient(circle at top left, rgba(167, 204, 233, 0.34), transparent 24%),
+    radial-gradient(circle at 80% 8%, rgba(121, 168, 206, 0.2), transparent 18%),
+    radial-gradient(circle at 50% 100%, rgba(211, 232, 247, 0.4), transparent 28%),
+    linear-gradient(145deg, #fbfdff 0%, #f0f7fd 44%, #e3eef8 100%);
   color: #10211d;
-  --card: rgba(255, 251, 244, 0.84);
-  --card-strong: #173833;
-  --accent: #d66c3f;
-  --accent-soft: #f7d2bb;
-  --muted: #58655f;
-  --outline: rgba(16, 33, 29, 0.08);
+  --card: rgba(255, 255, 255, 0.88);
+  --card-strong: #214c71;
+  --accent: #4f8fbe;
+  --accent-soft: #d9ebf8;
+  --muted: #5d6f7d;
+  --outline: rgba(26, 58, 86, 0.1);
 }
 
 * {
@@ -93,10 +93,10 @@ p {
 }
 
 .site-header {
-  background: rgba(255, 251, 244, 0.78);
+  background: rgba(248, 252, 255, 0.82);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(16, 33, 29, 0.08);
-  box-shadow: 0 20px 55px rgba(16, 33, 29, 0.08);
+  border: 1px solid rgba(53, 102, 141, 0.1);
+  box-shadow: 0 20px 55px rgba(52, 92, 128, 0.08);
 }
 
 .site-header {
@@ -135,7 +135,7 @@ p {
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #173833, #d66c3f);
+  background: linear-gradient(135deg, #214c71, #7ca9c9);
   color: #fff8ef;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -154,7 +154,7 @@ p {
 .footer-meta span {
   padding: 0.7rem 0.9rem;
   border-radius: 999px;
-  background: rgba(243, 229, 208, 0.74);
+  background: rgba(223, 237, 248, 0.88);
 }
 
 .site-nav {
@@ -164,7 +164,7 @@ p {
 
 .site-nav a {
   font-weight: 600;
-  color: #20312d;
+  color: #234564;
 }
 
 .site-header-actions {
@@ -182,9 +182,9 @@ p {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: rgba(243, 229, 208, 0.74);
-  border: 1px solid rgba(16, 33, 29, 0.08);
-  color: #173833;
+  background: rgba(223, 237, 248, 0.88);
+  border: 1px solid rgba(53, 102, 141, 0.1);
+  color: #214c71;
 }
 
 .site-header-icon svg {
@@ -199,7 +199,7 @@ p {
   min-width: 92px;
   padding: 0.7rem 1rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #173833, #245851);
+  background: linear-gradient(135deg, #214c71, #5f93bc);
   color: #fff8ef;
   font-weight: 700;
 }
@@ -211,7 +211,7 @@ p {
 .landing-hero,
 .signin-page {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 1fr;
   gap: 1.5rem;
   align-items: stretch;
 }
@@ -232,8 +232,8 @@ p {
 .showcase-card,
 .feature-card {
   display: grid;
-  gap: 0.95rem;
-  align-content: start;
+  gap: 0.55rem;
+  align-content: center;
 }
 
 .public-page-layout {
@@ -271,24 +271,130 @@ p {
   padding: 2rem;
 }
 
+.landing-copy {
+  min-height: 520px;
+  text-align: center;
+  justify-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff8ef;
+  border: 1px solid rgba(255, 248, 239, 0.16);
+}
+
 .landing-copy h1,
 .signin-panel h1 {
   font-size: clamp(2.7rem, 6vw, 5.4rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
+  margin-bottom: 0.15rem;
+}
+
+.landing-copy h1 {
+  max-width: none;
+}
+
+.landing-copy .eyebrow {
+  color: rgba(255, 248, 239, 0.78);
+}
+
+.landing-copy .hero-text {
+  color: rgba(255, 248, 239, 0.86);
 }
 
 .hero-text {
   font-size: 1.1rem;
   line-height: 1.7;
   color: var(--muted);
-  max-width: 44rem;
+  max-width: none;
+  margin-top: 0;
 }
 
 .landing-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
+  justify-content: center;
+}
+
+.landing-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+}
+
+.landing-highlights span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(243, 229, 208, 0.74);
+  color: #20312d;
+  font-weight: 600;
+}
+
+.landing-copy .landing-highlights span {
+  background: rgba(255, 248, 239, 0.16);
+  color: #fff8ef;
+  border: 1px solid rgba(255, 248, 239, 0.16);
+}
+
+.landing-banner {
+  max-width: 1280px;
+  margin: 1.5rem auto 0;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.25rem;
+  padding: 1.6rem;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(207, 227, 243, 0.24), transparent 24%),
+    linear-gradient(135deg, rgba(33, 76, 113, 0.96), rgba(93, 144, 184, 0.92));
+  color: #fff8ef;
+  box-shadow: 0 24px 60px rgba(16, 33, 29, 0.14);
+}
+
+.landing-banner-copy {
+  display: grid;
+  gap: 0.75rem;
+  align-content: center;
+}
+
+.landing-banner-copy h2 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.landing-banner-copy p:last-child {
+  margin-bottom: 0;
+  color: rgba(255, 248, 239, 0.82);
+  font-size: 1.05rem;
+}
+
+.landing-banner-metrics {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.landing-banner-metrics article {
+  padding: 1rem 1.1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.landing-banner-metrics strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1.1rem;
+}
+
+.landing-banner-metrics span {
+  color: rgba(255, 248, 239, 0.85);
+  line-height: 1.55;
 }
 
 .solid-link,
@@ -305,7 +411,7 @@ p {
 
 .solid-link,
 .signin-button {
-  background: linear-gradient(135deg, #173833, #245851);
+  background: linear-gradient(135deg, #214c71, #5f93bc);
   color: #fff8ef;
 }
 
@@ -313,6 +419,12 @@ p {
 .back-link {
   background: rgba(255, 249, 240, 0.68);
   border: 1px solid rgba(16, 33, 29, 0.08);
+}
+
+.landing-copy .ghost-link {
+  background: rgba(255, 248, 239, 0.14);
+  border-color: rgba(255, 248, 239, 0.18);
+  color: #fff8ef;
 }
 
 .showcase-card {
@@ -365,7 +477,7 @@ p {
 }
 
 .feature-strip {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 1.5rem 0 0;
 }
 
@@ -374,7 +486,8 @@ p {
 }
 
 .feature-card h2 {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.35rem;
+  font-size: 1.35rem;
 }
 
 .shell {
@@ -904,8 +1017,8 @@ p {
   gap: 1.5rem;
   padding: 2rem 1.5rem 1.35rem;
   margin-top: auto;
-  background: linear-gradient(180deg, rgba(247, 239, 226, 0.84), rgba(239, 229, 214, 0.94));
-  border-top: 1px solid rgba(16, 33, 29, 0.12);
+  background: linear-gradient(180deg, rgba(244, 249, 254, 0.9), rgba(228, 239, 248, 0.96));
+  border-top: 1px solid rgba(53, 102, 141, 0.12);
 }
 
 .site-footer.compact {
@@ -924,7 +1037,7 @@ p {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #4f5a55;
+  color: #587184;
 }
 
 .footer-links {
@@ -941,7 +1054,7 @@ p {
   padding: 0;
   border-radius: 0;
   background: transparent;
-  color: #24312d;
+  color: #274663;
   line-height: 1.5;
 }
 
@@ -952,8 +1065,8 @@ p {
   align-items: center;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(16, 33, 29, 0.1);
-  color: #51605a;
+  border-top: 1px solid rgba(53, 102, 141, 0.12);
+  color: #5b7284;
   font-size: 0.95rem;
 }
 
@@ -977,7 +1090,7 @@ p {
   justify-content: center;
   border-radius: 999px;
   border: 1px solid rgba(16, 33, 29, 0.12);
-  background: rgba(243, 229, 208, 0.45);
+  background: rgba(223, 237, 248, 0.45);
   transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
@@ -988,8 +1101,8 @@ p {
 
 .social-links a:hover {
   transform: translateY(-1px);
-  background: rgba(214, 108, 63, 0.12);
-  border-color: rgba(214, 108, 63, 0.3);
+  background: rgba(79, 143, 190, 0.12);
+  border-color: rgba(79, 143, 190, 0.3);
 }
 
 .panel-header,
@@ -1510,6 +1623,7 @@ td {
   }
 
   .feature-strip,
+  .landing-banner,
   .public-page-grid,
   .metric-grid,
   .insight-grid,
