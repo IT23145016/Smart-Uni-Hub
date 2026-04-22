@@ -35,13 +35,40 @@ a {
 }
 
 button {
-  border: 0;
-  border-radius: 999px;
-  padding: 0.8rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  padding: 0.88rem 1.2rem;
   font: inherit;
-  background: #10211d;
-  color: #f7f1e8;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, #112a43, #214c71);
+  color: #f7fbff;
   cursor: pointer;
+  box-shadow:
+    0 14px 28px rgba(17, 42, 67, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease,
+    border-color 0.18s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 18px 32px rgba(17, 42, 67, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  filter: saturate(1.05);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.9;
+  transform: none;
+  box-shadow:
+    0 10px 20px rgba(17, 42, 67, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 input,
@@ -447,25 +474,49 @@ p {
 .solid-link,
 .ghost-link,
 .signin-button,
-.back-link {
+.back-link,
+.page-menubar-logout,
+.oauth-button,
+.toolbar-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.95rem 1.2rem;
-  border-radius: 999px;
-  font-weight: 600;
+  border-radius: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .solid-link,
 .signin-button {
-  background: linear-gradient(135deg, #214c71, #5f93bc);
-  color: #fff8ef;
+  background: linear-gradient(135deg, #112a43, #214c71);
+  color: #f7fbff;
+  box-shadow:
+    0 14px 28px rgba(17, 42, 67, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .ghost-link,
 .back-link {
-  background: rgba(239, 247, 255, 0.82);
-  border: 1px solid rgba(53, 102, 141, 0.1);
+  background: linear-gradient(135deg, rgba(20, 43, 67, 0.96), rgba(33, 76, 113, 0.96));
+  border: 1px solid rgba(152, 188, 223, 0.18);
+  color: #f7fbff;
+  box-shadow: 0 12px 24px rgba(17, 42, 67, 0.18);
+}
+
+.solid-link:hover,
+.ghost-link:hover,
+.signin-button:hover,
+.back-link:hover,
+.page-menubar-logout:hover,
+.oauth-button:hover,
+.toolbar-button:hover {
+  transform: translateY(-1px);
 }
 
 .landing-copy .ghost-link {
@@ -666,18 +717,19 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.7rem 1rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f3f8fd;
-  border: 1px solid rgba(184, 214, 239, 0.18);
-  font-weight: 600;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(240, 247, 255, 0.98), rgba(214, 231, 246, 0.98));
+  color: #173f61;
+  border: 1px solid rgba(121, 166, 203, 0.24);
+  box-shadow:
+    0 14px 28px rgba(79, 143, 190, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
   transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
 .page-menubar-logout:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(184, 214, 239, 0.26);
+  background: linear-gradient(135deg, rgba(248, 252, 255, 1), rgba(223, 237, 249, 1));
+  border-color: rgba(121, 166, 203, 0.34);
   transform: translateY(-1px);
 }
 
@@ -1001,7 +1053,7 @@ p {
 .oauth-button {
   margin-top: 1rem;
   text-align: center;
-  background: linear-gradient(135deg, #214c71, #5f93bc);
+  background: linear-gradient(135deg, #112a43, #214c71);
   color: #f6fbff;
 }
 
@@ -1293,6 +1345,7 @@ p {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+  margin-bottom: 1.35rem;
 }
 
 .filter-grid {
@@ -1312,6 +1365,13 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.form-actions,
+.card-actions,
+.table-actions {
+  margin-top: 1rem;
+  padding-top: 0.15rem;
 }
 
 .filter-actions {
@@ -1337,9 +1397,12 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(223, 237, 249, 0.98), rgba(203, 223, 241, 0.98));
-  color: #214c71;
-  border: 1px solid rgba(53, 102, 141, 0.12);
+  background: linear-gradient(135deg, rgba(20, 43, 67, 0.96), rgba(33, 76, 113, 0.96));
+  color: #f7fbff;
+  border: 1px solid rgba(152, 188, 223, 0.16);
+  box-shadow:
+    0 10px 24px rgba(17, 42, 67, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 .resource-grid,
@@ -1349,6 +1412,7 @@ p {
 .booking-request-meta {
   display: grid;
   gap: 1rem;
+  margin-top: 0.35rem;
 }
 
 .resource-intro,
@@ -1532,6 +1596,14 @@ p {
   box-shadow:
     0 18px 42px rgba(16, 33, 29, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.resource-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.2rem;
+  padding-top: 0.25rem;
 }
 
 .resource-card-head,
@@ -2008,6 +2080,7 @@ td {
 .ticket-list {
   display: grid;
   gap: 1rem;
+  margin-top: 1.25rem;
 }
 
 .ticket-card {
