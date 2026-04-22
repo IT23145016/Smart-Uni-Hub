@@ -11,19 +11,17 @@ export default function SignInPage() {
     <div className="landing-page">
       <SiteHeader />
       <div className="signin-page">
-        <section className="signin-panel">
-          <div>
+        <section className="signin-panel signin-action-card">
+          <div className="signin-card-copy">
             <p className="eyebrow">Welcome back</p>
-            <h1>Sign in to your campus operations workspace.</h1>
-            <p className="hero-text">
-              Use your Google account to access notifications, role management, and the wider campus workflow.
-            </p>
+            <h2>Continue to Smart Uni Hub</h2>
+            <p>Use your university Google account to enter the platform.</p>
           </div>
 
           <div className="signin-checklist">
             <span>Google OAuth authentication</span>
-            <span>Role-based dashboard access</span>
-            <span>MongoDB-backed notifications</span>
+            <span>Role-based access control</span>
+            <span>Secure campus workspace</span>
           </div>
 
           {authMessage ? <p className="error">{authMessage}</p> : null}
@@ -33,25 +31,29 @@ export default function SignInPage() {
           </a>
 
           <Link className="back-link" to="/">
-            Back to welcome page
+            Back to home page
           </Link>
         </section>
 
-        <section className="signin-sidecard">
-          <p className="eyebrow">Inside the platform</p>
-          <h2>See approvals, incidents, and admin controls in one place.</h2>
+        <section className="signin-sidecard signin-overview-card">
+          <p className="eyebrow">Campus Access</p>
+          <h1>Sign in with Google to continue.</h1>
+          <p className="hero-text">
+            Access facilities, bookings, maintenance updates, and role-based features from one secure workspace.
+          </p>
+
           <div className="signin-metrics">
             <article>
-              <strong>Role aware</strong>
-              <span>Users, admins, and technicians see the right actions.</span>
+              <strong>Secure access</strong>
+              <span>Google authentication with role-based visibility.</span>
             </article>
             <article>
-              <strong>Actionable alerts</strong>
-              <span>Every booking and maintenance update can trigger a visible notification.</span>
+              <strong>Clear workflows</strong>
+              <span>Use one system for requests, updates, and operations.</span>
             </article>
             <article>
-              <strong>Built for teamwork</strong>
-              <span>Your module is ready for the rest of the group to integrate with.</span>
+              <strong>Smart notifications</strong>
+              <span>Stay updated with changes that matter to your role.</span>
             </article>
           </div>
         </section>
