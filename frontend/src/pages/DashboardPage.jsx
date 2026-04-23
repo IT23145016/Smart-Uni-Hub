@@ -60,17 +60,12 @@ export default function DashboardPage() {
   return (
     <Shell title="Operations Dashboard">
 
-      <section className="hero-card accent-card" style={{ padding: "1.8rem" }}>
-        <p className="eyebrow">Administration Centre</p>
-        <h2 style={{ marginBottom: "0.5rem" }}>Good to have you back, Admin.</h2>
-        <p style={{ color: "var(--muted)", marginBottom: "1.2rem" }}>Here's a live snapshot of your campus operations.</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-          <Link className="solid-link" to="/admin/bookings" style={{ padding: "0.7rem 1.1rem", borderRadius: "12px", fontSize: "0.9rem" }}>Manage Bookings</Link>
-          <Link className="ghost-link" to="/tickets/manage" style={{ padding: "0.7rem 1.1rem", borderRadius: "12px", fontSize: "0.9rem" }}>Manage Tickets</Link>
-          <Link className="ghost-link" to="/admin/resources" style={{ padding: "0.7rem 1.1rem", borderRadius: "12px", fontSize: "0.9rem" }}>Manage Resources</Link>
-          <Link className="ghost-link" to="/admin/roles" style={{ padding: "0.7rem 1.1rem", borderRadius: "12px", fontSize: "0.9rem" }}>Role Management</Link>
-        </div>
-      </section>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.75rem" }}>
+        <Link className="solid-link" to="/admin/bookings" style={{ justifyContent: "center" }}>Manage Bookings</Link>
+        <Link className="ghost-link" to="/tickets/manage" style={{ justifyContent: "center" }}>Manage Tickets</Link>
+        <Link className="ghost-link" to="/admin/resources" style={{ justifyContent: "center" }}>Manage Resources</Link>
+        <Link className="ghost-link" to="/admin/roles" style={{ justifyContent: "center" }}>Role Management</Link>
+      </div>
 
       {error ? <p className="error">{error}</p> : null}
       {loading ? <p className="muted">Loading dashboard data...</p> : null}
@@ -86,12 +81,8 @@ export default function DashboardPage() {
           </section>
 
           {/* Resource Chart - Hero Section */}
-          <section className="hero-card" style={{ padding: "2rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "center" }}>
+          <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "center" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem" }}>
-              <div>
-                <p className="eyebrow" style={{ textAlign: "center" }}>Resource Status</p>
-                <h3 style={{ textAlign: "center", marginBottom: 0 }}>Facilities Overview</h3>
-              </div>
               <PieChart
                 active={activeResources}
                 maintenance={maintenanceResources}
