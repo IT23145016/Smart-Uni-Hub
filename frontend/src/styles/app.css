@@ -242,6 +242,20 @@ p {
   font-weight: 700;
 }
 
+.site-header-signup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #214c71, #5f93bc);
+  border: 1px solid rgba(53, 102, 141, 0.12);
+  color: #fff8ef;
+  font-weight: 700;
+  box-shadow: 0 14px 28px rgba(33, 76, 113, 0.14);
+}
+
 .header-cta {
   white-space: nowrap;
 }
@@ -469,6 +483,235 @@ p {
 
 .signin-provider-icon.microsoft {
   color: #f4b400;
+}
+
+.signup-page {
+  justify-content: center;
+}
+
+.signup-action-card {
+  max-width: 640px;
+}
+
+.signup-card-copy {
+  justify-items: start;
+}
+
+.signup-card-copy p {
+  margin-bottom: 0;
+}
+
+.signup-form {
+  gap: 0.85rem;
+}
+
+.signup-field-row {
+  grid-template-columns: 110px minmax(0, 1fr);
+}
+
+.signup-meta {
+  margin: 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.signup-meta a {
+  color: #214c71;
+  font-weight: 700;
+}
+
+.signup-page-shell {
+  min-height: calc(100vh - 240px);
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem 1rem;
+  background:
+    radial-gradient(circle at center, rgba(181, 214, 239, 0.36), transparent 42%),
+    linear-gradient(180deg, rgba(238, 246, 253, 0.4), rgba(230, 240, 249, 0.18));
+  border-radius: 32px;
+}
+
+.signup-auth-card {
+  width: min(100%, 420px);
+  display: grid;
+  gap: 1.1rem;
+  padding: 2rem 1.8rem;
+  background:
+    linear-gradient(180deg, rgba(253, 255, 255, 0.99), rgba(236, 245, 252, 0.98)),
+    rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(79, 143, 190, 0.18);
+  border-radius: 28px;
+  box-shadow:
+    0 28px 64px rgba(33, 76, 113, 0.16),
+    0 0 0 6px rgba(214, 231, 246, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.signup-auth-copy {
+  display: grid;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.signup-auth-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #5d7d97;
+}
+
+.signup-auth-copy h2 {
+  margin-bottom: 0;
+  font-size: 1.95rem;
+  line-height: 1.1;
+  color: #173f61;
+}
+
+.signup-auth-copy p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.signup-auth-actions {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.signup-method-button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.signup-method-primary {
+  background: linear-gradient(135deg, #173f61, #4f8fbe);
+  color: #f7fbff;
+  box-shadow:
+    0 14px 28px rgba(33, 76, 113, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.signup-method-outline {
+  background: rgba(255, 255, 255, 0.94);
+  color: #214c71;
+  border: 1px solid rgba(174, 196, 218, 0.64);
+  box-shadow: 0 10px 22px rgba(33, 76, 113, 0.08);
+}
+
+.signup-method-outline.google {
+  background: linear-gradient(135deg, #214c71, #5f93bc);
+  border-color: rgba(53, 102, 141, 0.12);
+  color: #fff8ef;
+  box-shadow: 0 14px 28px rgba(33, 76, 113, 0.14);
+}
+
+.signup-method-outline.facebook {
+  border-color: rgba(121, 166, 203, 0.36);
+}
+
+.signup-method-outline.apple {
+  border-color: rgba(121, 166, 203, 0.36);
+}
+
+.signup-method-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+.signup-inline-form {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.95rem;
+  border-radius: 18px;
+  background: rgba(233, 243, 251, 0.92);
+  border: 1px solid rgba(79, 143, 190, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.signup-inline-field {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.signup-inline-field span {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #214c71;
+}
+
+.signup-password-wrap {
+  position: relative;
+}
+
+.signup-password-wrap input {
+  padding-right: 3rem;
+}
+
+.signup-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.55rem;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #5b7b96;
+}
+
+.signup-password-toggle:hover {
+  transform: translateY(-50%);
+  background: rgba(79, 143, 190, 0.08);
+  box-shadow: none;
+}
+
+.signup-password-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.signup-inline-submit {
+  width: 100%;
+}
+
+.signup-terms {
+  margin: 0;
+  color: #6d7c89;
+  font-size: 0.82rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.signup-login-link {
+  margin: 0;
+  padding-top: 0.35rem;
+  text-align: center;
+  color: #7c8893;
+  font-size: 0.92rem;
+  border-top: 1px solid rgba(53, 102, 141, 0.08);
+}
+
+.signup-login-link a {
+  color: #214c71;
+  font-weight: 700;
 }
 
 .landing-copy {

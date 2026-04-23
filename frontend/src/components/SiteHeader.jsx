@@ -31,9 +31,14 @@ export default function SiteHeader() {
         </Link>
 
         {!user ? (
-          <Link className="site-header-login" to="/signin">
-            Sign In
-          </Link>
+          <>
+            <Link className="site-header-signup" to="/signup">
+              Sign Up
+            </Link>
+            <Link className="site-header-login" to="/signin">
+              Sign In
+            </Link>
+          </>
         ) : null}
 
         <Link

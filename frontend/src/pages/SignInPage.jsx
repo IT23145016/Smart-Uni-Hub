@@ -68,6 +68,10 @@ export default function SignInPage() {
             </a>
           </div>
 
+          <p className="signup-meta">
+            Need a new account? <Link to="/signup">Create one here</Link>
+          </p>
+
           <Link className="back-link" to="/">
             Back to home page
           </Link>
