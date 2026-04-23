@@ -340,16 +340,44 @@ p {
 .signin-action-card {
   display: grid;
   gap: 0.7rem;
-  align-content: start;
+  align-content: space-between;
+  justify-items: center;
   max-width: 480px;
   margin: 0 auto;
-  padding: 1.25rem 1.5rem;
+  min-height: 600px;
+  padding: 1.7rem 1.5rem 0.9rem;
+}
+
+.signin-theme-page {
+  justify-content: center;
+}
+
+.signin-theme-card {
+  background:
+    linear-gradient(180deg, rgba(253, 255, 255, 0.99), rgba(236, 245, 252, 0.98)),
+    rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(79, 143, 190, 0.14);
+  border-radius: 28px;
+  box-shadow:
+    0 28px 64px rgba(33, 76, 113, 0.14),
+    0 0 0 6px rgba(214, 231, 246, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
 }
 
 .signin-card-copy {
   display: grid;
   gap: 0.5rem;
   justify-items: center;
+  text-align: center;
+}
+
+.signin-auth-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #5d7d97;
 }
 
 .signin-card-copy h2 {
@@ -357,6 +385,7 @@ p {
   font-size: clamp(1.9rem, 4vw, 3rem);
   line-height: 1.02;
   letter-spacing: -0.03em;
+  color: #173f61;
 }
 
 .signin-card-copy p:last-child {
@@ -373,40 +402,75 @@ p {
 
 .signin-form {
   display: grid;
-  gap: 0.65rem;
+  gap: 0.85rem;
+  width: min(100%, 360px);
 }
 
 .signin-field-row {
   display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  gap: 0.8rem;
-  align-items: center;
+  gap: 0.42rem;
+  align-items: stretch;
+  width: 100%;
 }
 
 .signin-field-label {
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #4b5450;
+  color: #214c71;
+  text-align: left;
 }
 
 .signin-input-wrap {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.6rem;
-  align-items: center;
+  display: block;
+}
+
+.signin-password-wrap {
+  position: relative;
+}
+
+.signin-password-wrap input {
+  padding-right: 3rem;
+}
+
+.signin-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.55rem;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #5b7b96;
+}
+
+.signin-password-toggle:hover {
+  transform: translateY(-50%);
+  background: rgba(79, 143, 190, 0.08);
+  box-shadow: none;
+}
+
+.signin-password-toggle svg {
+  width: 18px;
+  height: 18px;
 }
 
 .signin-input-wrap input {
   min-width: 0;
-  border-radius: 0;
-  border: 1px solid #7cb4df;
-  background: #ffffff;
-  padding: 0.78rem 0.9rem;
-  box-shadow: inset 0 1px 2px rgba(33, 76, 113, 0.06);
+  border-radius: 14px;
+  border: 1px solid rgba(79, 143, 190, 0.16);
+  background: rgba(240, 247, 255, 0.96);
+  padding: 0.85rem 0.95rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    0 8px 18px rgba(33, 76, 113, 0.05);
 }
 
 .signin-input-wrap input::placeholder {
-  color: #a2aeb6;
+  color: #90a3b4;
 }
 
 .signin-input-wrap small {
@@ -418,13 +482,7 @@ p {
 
 .signin-submit-button {
   width: 100%;
-  border: none;
-  border-radius: 0;
-  padding: 0.8rem 1rem;
-  background: #68a8dd;
-  color: #fff;
-  font-weight: 700;
-  box-shadow: none;
+  border-radius: 16px;
 }
 
 .signin-forgot-link {
@@ -432,34 +490,35 @@ p {
   border: none;
   background: transparent;
   padding: 0;
-  color: #7c95b0;
-  font-weight: 500;
+  color: #5d7d97;
+  font-weight: 600;
   box-shadow: none;
 }
 
 .signin-provider-list {
   display: grid;
   gap: 0.7rem;
-  margin-top: 0.15rem;
+  margin-top: 0.3rem;
+  width: min(100%, 360px);
 }
 
 .signin-provider-button {
-  display: grid;
-  grid-template-columns: 28px 1fr;
+  display: inline-flex;
   align-items: center;
-  gap: 0.9rem;
+  justify-content: center;
+  gap: 0.55rem;
   width: 100%;
-  padding: 0.82rem 1rem;
-  border: 1px solid #d7dee5;
-  border-radius: 0;
-  background: #fff;
-  color: #4b5450;
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(16, 33, 29, 0.08);
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(79, 143, 190, 0.14);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #214c71, #5f93bc);
+  color: #f7fbff;
+  font-weight: 700;
+  box-shadow: 0 14px 28px rgba(33, 76, 113, 0.14);
 }
 
 .signin-provider-button.google {
-  border: 3px solid #cf4436;
+  border: 1px solid rgba(53, 102, 141, 0.12);
 }
 
 .signin-provider-button:disabled {
@@ -473,6 +532,8 @@ p {
   justify-content: center;
   width: 20px;
   height: 20px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .signin-provider-icon svg {
