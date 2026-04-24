@@ -17,7 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.Map;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -89,19 +91,21 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public AuthUserResponse me() {
+    public ResponseEntity<AuthUserResponse> me() {
         UserAccount sessionUser = SecurityUtils.currentUser();
         UserAccount user = userAccountService.findById(sessionUser.getId());
         if (!user.isActive()) {
             throw new ForbiddenOperationException("Your account has been deactivated by an administrator.");
         }
-        return new AuthUserResponse(
-                user.getId(),
-                user.getEmail(),
-                user.getFullName(),
-                user.getAvatarUrl(),
-                user.getRoles(),
-                userAccountService.toNotificationPreferences(user));
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noCache().mustRevalidate())
+                .body(new AuthUserResponse(
+                        user.getId(),
+                        user.getEmail(),
+                        user.getFullName(),
+                        user.getAvatarUrl(),
+                        user.getRoles(),
+                        userAccountService.toNotificationPreferences(user)));
     }
 
     @PatchMapping("/notification-preferences")
