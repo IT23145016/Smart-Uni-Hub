@@ -207,7 +207,7 @@ export default function BookingsPage() {
                       ) : null}
 
                       <div className="booking-row-actions">
-                        {booking.status === "APPROVED" || booking.status === "PENDING" ? (
+                        {((booking.status === "APPROVED" && !booking.checkedInAt) || booking.status === "PENDING") ? (
                           <button
                             type="button"
                             className="secondary-button"
@@ -219,7 +219,8 @@ export default function BookingsPage() {
                         ) : (
                           <span className="status-note">
                             {booking.status === "REJECTED" ? "Booking was rejected" :
-                             booking.status === "CANCELLED" ? "Booking cancelled" : "No actions available"}
+                             booking.status === "CANCELLED" ? "Booking cancelled" :
+                             booking.checkedInAt ? "Booking has been checked in" : "No actions available"}
                           </span>
                         )}
                       </div>
