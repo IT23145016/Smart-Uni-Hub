@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import QRCode from "qrcode";
 import { useSearchParams } from "react-router-dom";
 import Shell from "../components/Shell";
 import { api } from "../services/api";
@@ -239,6 +240,8 @@ export default function BookingsPage() {
 }
 
 function BookingQrCard({ booking, appOrigin }) {
+  const [downloading, setDownloading] = useState(false);
+
   if (!booking.checkInToken) {
     return (
       <aside className="booking-qr-card">
@@ -254,6 +257,31 @@ function BookingQrCard({ booking, appOrigin }) {
   }
 
   const verificationUrl = `${appOrigin}/bookings/check-in?token=${encodeURIComponent(booking.checkInToken)}`;
+
+  async function downloadQrCode() {
+    setDownloading(true);
+    try {
+      const qrDataUrl = await QRCode.toDataURL(verificationUrl, {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#173f61',
+          light: '#ffffff'
+        }
+      });
+
+      const link = document.createElement('a');
+      link.href = qrDataUrl;
+      link.download = `booking-${booking.id}-qr.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Failed to generate QR code:', error);
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   return (
     <aside className="booking-qr-card">
@@ -281,10 +309,14 @@ function BookingQrCard({ booking, appOrigin }) {
           <strong>{new Date(booking.checkedInAt).toLocaleString()}</strong>
         </div>
       ) : null}
-      <a className="booking-qr-link" href={verificationUrl} target="_blank" rel="noreferrer">
-        <span>Open verification screen</span>
-        <strong>Staff check-in</strong>
-      </a>
+      <button
+        type="button"
+        className="booking-qr-download"
+        onClick={downloadQrCode}
+        disabled={downloading}
+      >
+        {downloading ? "Generating..." : "Download QR Code"}
+      </button>
     </aside>
   );
 }
